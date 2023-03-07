@@ -7,8 +7,5 @@ def parse():
     )
     comparator.add_argument('first_file')
     comparator.add_argument('second_file')
+    comparator.add_argument('-f', '--format', help='set format of output')
     return comparator.parse_args()
-
-
-if __name__ == '__main__':
-    parse()

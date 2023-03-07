@@ -13,7 +13,7 @@ flake8 = "^6.0.0"
 pip = "^23.0.1"
 
 [tool.poetry.scripts]
-gendiff = 'gendiff.scripts.gendiff:parse'
+gendiff = 'gendiff.cli:parse'
 
 [build-system]
 requires = ["poetry-core"]
