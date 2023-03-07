@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "hexlet-code"
+version = "0.1.0"
+description = "The second project which s aim to show my skills in coding, though to get a practice."
+authors = ["bogdan <telioko@tutanota.com>"]
+license = "GNU"
+readme = "README.md"
+packages = [{include = "gendiff"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flake8 = "^6.0.0"
+pip = "^23.0.1"
+
+[tool.poetry.scripts]
+gendiff = 'gendiff.scripts.gendiff:parse'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
