@@ -20,27 +20,31 @@ def sort_for_diff(items):
             if key1 == key2 and char1 == '+':
                 items[i], items[i + 1] = items[i + 1], items[i]
 
-    
 
 def generate_diff(first_path, second_path):
-    first_data = json.load(open(first_path))
-    second_data = json.load(open(second_path))
+    first_file = open(first_path)
+    first_data = json.load(first_file)
+    second_file = open(second_path)
+    second_data = json.load(second_file)
     first_set = set(first_data.items())
     second_set = set(second_data.items())
+    first_file.close()
+    second_file.close()
     first_unique = first_set - second_set
     second_unique = second_set - first_set
     common_items = first_set & second_set
     result = []
-    for key,val in first_unique:
+    for key, val in first_unique:
         result.append(f'- {key}: {val}')
-    for key,val in second_unique:
+    for key, val in second_unique:
         result.append(f'+ {key}: {val}')
-    for key,val in common_items:
+    for key, val in common_items:
         result.append(f'  {key}: {val}')
     sort_for_diff(result)
     return '{\n' + '\n'.join(result) + '\n}'
 
-    #Second vareity of func
+
+# Second variety of func
     # for key,val in first_data.items():
     #     val_in_2data = second_data.pop(key, None)
     #     first_data.pop(key)
