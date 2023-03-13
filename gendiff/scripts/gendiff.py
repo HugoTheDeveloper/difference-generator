@@ -3,13 +3,13 @@ import json
 
 
 def sort_for_diff(items):
-    '''
+    """
     Sort an array of differences with signs - +
     in alphabet order. If keys are similar, the first
     one will be a pair with sign -
     :param items: list
     :return: None
-    '''
+    """
     for limit in range(len(items) - 1, 0, -1):
         for i in range(limit):
             char1 = items[i][0]
