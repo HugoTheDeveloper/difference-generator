@@ -43,7 +43,6 @@ def generate_diff(first_path, second_path):
     sort_for_diff(result)
     return '{\n' + '\n'.join(result) + '\n}'
 
-
 # Second variety of func
     # for key,val in first_data.items():
     #     val_in_2data = second_data.pop(key, None)

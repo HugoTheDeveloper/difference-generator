@@ -1,20 +1,20 @@
 install:
-		poetry install
+	poetry install
 
 build:
-		poetry build
+	poetry build
 
 publish:
-		poetry publish --dry-run
+	poetry publish --dry-run
 
 package-install:
-		python3 -m pip install --user dist/*.whl
+	python3 -m pip install --user dist/*.whl
 
 package-reinstall:
-		python3 -m pip install --user --force-reinstall dist/*.whl
+	python3 -m pip install --user --force-reinstall dist/*.whl
 
 lint:
-		poetry run flake8 gendiff
+	poetry run flake8 gendiff
 
 test:
 	poetry run pytest
@@ -24,3 +24,7 @@ test-coverage:
 
 selfcheck:
 	poetry check
+
+check: selfcheck test lint
+
+.PHONY: install test lint selfcheck check build
