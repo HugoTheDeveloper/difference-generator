@@ -1,4 +1,4 @@
-from gendiff.scripts.gendiff import generate_diff # noqa
+from gendiff.scripts.parser_json import generate_diff # noqa
 
 
 __all__ = 'generate_diff'

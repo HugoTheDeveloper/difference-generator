@@ -1,4 +1,4 @@
-from gendiff.scripts.gendiff import *
+from gendiff.scripts.parser_json import *
 
 
 correct_diff_between_first_and_second = '{\n- follow: False\n  host: hexlet.io\n' \
