@@ -1,48 +1,75 @@
 #!usr/bin/env python3
 import json
+from gendiff.parser import build_diff_dic
 
 
-def sort_for_diff(items):
-    """
-    Sort an array of differences with signs - +
-    in alphabet order. If keys are similar, the first
-    one will be a pair with sign -
-    :param items: list
-    :return: None
-    """
-    for limit in range(len(items) - 1, 0, -1):
-        for i in range(limit):
-            char1 = items[i][0]
-            key1 = items[i][2:].split(': ')[0]
-            key2 = items[i + 1][2:].split(': ')[0]
-            if key1 > key2:
-                items[i], items[i + 1] = items[i + 1], items[i]
-            if key1 == key2 and char1 == '+':
-                items[i], items[i + 1] = items[i + 1], items[i]
+def stringify(obj, tabs=1):
+    if isinstance(obj, (list, tuple)):
+        return "[" + ",".join([stringify(item) for item in obj]) + "]"
+    elif isinstance(obj, dict):
+        return "{\n" + '\n'.join([f'{tabs * "  "}{key}: {stringify(value, tabs + 2)}'
+                                  for key, value in obj.items()]) + '\n' + (tabs - 1) * "  " + "}"
+    elif isinstance(obj, str):
+        return f'{obj}'
+    elif isinstance(obj, bool):
+        return str(obj).lower()
+    elif obj is None:
+        return "null"
+    else:
+        return str(obj)
+
+# def sort_for_diff(items):
+#     """
+#     Sort an array of differences with signs - +
+#     in alphabet order. If keys are similar, the first
+#     one will be a pair with sign -
+#     :param items: list
+#     :return: None
+#     """
+#     for limit in range(len(items) - 1, 0, -1):
+#         for i in range(limit):
+#             char1 = items[i][0]
+#             key1 = items[i][2:].split(': ')[0]
+#             key2 = items[i + 1][2:].split(': ')[0]
+#             if key1 > key2:
+#                 items[i], items[i + 1] = items[i + 1], items[i]
+#             if key1 == key2 and char1 == '+':
+#                 items[i], items[i + 1] = items[i + 1], items[i]
 
 
-def generate_diff(first_path, second_path):
+# def generate_diff(first_path, second_path):
+#     first_file = open(first_path)
+#     first_data = json.load(first_file)
+#     second_file = open(second_path)
+#     second_data = json.load(second_file)
+#     first_set = set(first_data.items())
+#     second_set = set(second_data.items())
+#     first_file.close()
+#     second_file.close()
+#     first_unique = first_set - second_set
+#     second_unique = second_set - first_set
+#     common_items = first_set & second_set
+#     result = []
+#     for key, val in first_unique:
+#         result.append(f'- {key}: {val}')
+#     for key, val in second_unique:
+#         result.append(f'+ {key}: {val}')
+#     for key, val in common_items:
+#         result.append(f'  {key}: {val}')
+#     sort_for_diff(result)
+#     return '{\n' + '\n'.join(result) + '\n}'
+
+
+def gendiff(first_path, second_path):
     first_file = open(first_path)
     first_data = json.load(first_file)
     second_file = open(second_path)
     second_data = json.load(second_file)
-    first_set = set(first_data.items())
-    second_set = set(second_data.items())
-    first_file.close()
-    second_file.close()
-    first_unique = first_set - second_set
-    second_unique = second_set - first_set
-    common_items = first_set & second_set
-    result = []
-    for key, val in first_unique:
-        result.append(f'- {key}: {val}')
-    for key, val in second_unique:
-        result.append(f'+ {key}: {val}')
-    for key, val in common_items:
-        result.append(f'  {key}: {val}')
-    sort_for_diff(result)
-    return '{\n' + '\n'.join(result) + '\n}'
+    diff = build_diff_dic(first_data, second_data)
+    return diff
 
+
+print(stringify(gendiff('tree_file1.json', 'tree_file2.json')))
 # Second variety of func
     # for key,val in first_data.items():
     #     val_in_2data = second_data.pop(key, None)

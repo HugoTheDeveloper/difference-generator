@@ -3,8 +3,8 @@ from yaml import safe_load
 from parser_json import sort_for_diff
 
 
-filepath1 = 'file1.yaml'
-filepath2 = 'file2.yaml'
+filepath1 = 'plain_file.yaml'
+filepath2 = 'plain_file2.yaml'
 
 
 def generate_diff_yaml(first_path, second_path):
