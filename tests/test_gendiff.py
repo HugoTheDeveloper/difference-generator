@@ -1,19 +1,18 @@
 from gendiff.scripts.parser_json import *
 
 
-correct_diff_between_first_and_second = '{\n- follow: False\n  host: hexlet.io\n' \
-                                        '- proxy: 123.234.53.22\n- timeout: 50\n' \
-                                        '+ timeout: 20\n+ verbose: True\n}'
-correct_diff_between_second_and_first = '{\n+ follow: False\n  host: hexlet.io\n' \
-                                        '+ proxy: 123.234.53.22\n- timeout: 20\n' \
-                                        '+ timeout: 50\n- verbose: True\n}'
-json_filepath1 = 'tests/fixtures/plain_file1.json'
-json_filepath2 = 'tests/fixtures/plain_file2.json'
-
-def test_gendiff():
-    assert generate_diff(json_filepath1, json_filepath2) == \
-           correct_diff_between_first_and_second
-    assert generate_diff(json_filepath2, json_filepath1) == \
-            correct_diff_between_second_and_first
+def test_generate_diff_stylish():
+    with open('fixtures/correct_diff_between_1and2.txt') as correct_diff_between_1and2:
+        assert format_stylish(generate_diff(  # test json-json comparison
+            'fixtures/tree_file1.json', 'fixtures/tree_file2.json')) == ''.join(correct_diff_between_1and2.readlines())
+        assert format_stylish(generate_diff(  # test yaml-yaml comparison
+            'fixtures/tree_file1.yaml', 'fixtures/tree_file2.yaml')) == ''.join(correct_diff_between_1and2.readlines())
+    with open('fixtures/correct_diff_between_2and1.txt') as correct_diff_between_2and1:
+        assert format_stylish(generate_diff(  # test json-yaml comparison
+            'fixtures/tree_file2.json', 'fixtures/tree_file1.yaml')) == ''.join(correct_diff_between_2and1.readlines())
 
 
+# test_generate_diff_stylish()
+
+# with open('fixtures/correct_diff_between_1and2.txt') as correct_diff_between_1and2:
+#     print(correct_diff_between_1and2.readlines())
