@@ -1,4 +1,9 @@
-class DiffObject():
+def sort_by_key(item):
+    for key in item:
+        return key
+
+
+class DiffObject:
     def __init__(self):
         self.diff = []
 
@@ -8,12 +13,6 @@ class DiffObject():
     def append(self, value):
         self.diff.append(value)
 
-    def _sort(self):
-        """
-        sort diff object by key
-        :return: list
-        """
-        result = list(sorted(self.get_diff_list(), key=lambda x: x.keys()))
+    def sort(self):
+        result = list(sorted(self.get_diff_list(), key=sort_by_key))
         return result
-
-

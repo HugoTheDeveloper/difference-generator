@@ -1,4 +1,10 @@
-from gendiff.scripts.parser_json import *
+from gendiff.scripts.diff_generator import *
+import json
+
+
+def get_file(path):
+    with open(path) as f:
+        return json.loads(f.read())
 
 
 def test_generate_diff_stylish():
