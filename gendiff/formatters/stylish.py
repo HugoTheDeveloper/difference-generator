@@ -1,4 +1,5 @@
-SYMBOL_STATUS = {'added': '+ ', 'removed': '- ', 'not changed': '  ', 'nested': '  '}
+SYMBOL_STATUS = {'added': '+ ', 'removed': '- ',
+                 'not changed': '  ', 'nested': '  '}
 
 
 def get_status_key(key, status):
@@ -42,7 +43,8 @@ def get_stylish_stdout(diff, tabs=1):
     if isinstance(diff, (list, tuple)):
         return "[" + ",".join([get_stylish_stdout(item) for item in diff]) + "]"
     elif isinstance(diff, dict):
-        return "{\n" + '\n'.join([f'{tabs * "  "}{key}: {get_stylish_stdout(value, tabs + 2)}'
+        return "{\n" + '\n'.join([f'{tabs * "  "}{key}: '
+                                  f'{get_stylish_stdout(value, tabs + 2)}'
                                   for key, value in diff.items()]) + '\n' + (tabs - 1) * "  " + "}"
     elif isinstance(diff, str):
         return f'{diff}'

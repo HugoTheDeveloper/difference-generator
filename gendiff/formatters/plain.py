@@ -1,6 +1,6 @@
 def prepare_value_to_json_style(value):
     if isinstance(value, dict):
-        return f'[complex value]'
+        return '[complex value]'
     if isinstance(value, str):
         return f"'{value}'"
     if isinstance(value, bool):

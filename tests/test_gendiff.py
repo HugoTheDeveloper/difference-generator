@@ -1,9 +1,11 @@
 from gendiff.scripts.diff_generator import generate_diff
+import os
 import pytest
 
 
 def get_fixture(file_name):
-    return f'fixtures/{file_name}'
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(current_dir, 'fixtures', file_name)
 
 
 @pytest.fixture(scope='module')

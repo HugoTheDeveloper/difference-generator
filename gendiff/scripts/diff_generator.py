@@ -6,7 +6,8 @@ from gendiff.formatters.jsonify import format_json
 from gendiff.readers.reader import read_file_
 
 
-OUTPUT_FORMATTER = {'json': format_json, 'stylish': format_stylish, 'plain': format_plain}
+OUTPUT_FORMATTER = {'json': format_json,
+                    'stylish': format_stylish, 'plain': format_plain}
 
 
 def generate_diff(first_path, second_path, output_format):
