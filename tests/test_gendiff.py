@@ -1,24 +1,56 @@
-from gendiff.scripts.diff_generator import *
-import json
+from gendiff.scripts.diff_generator import generate_diff
+import pytest
 
 
-def get_file(path):
-    with open(path) as f:
-        return json.loads(f.read())
+def get_fixture(file_name):
+    return f'fixtures/{file_name}'
 
 
-def test_generate_diff_stylish():
-    with open('fixtures/correct_diff_between_1and2.txt') as correct_diff_between_1and2:
-        assert format_stylish(generate_diff(  # test json-json comparison
-            'fixtures/tree_file1.json', 'fixtures/tree_file2.json')) == ''.join(correct_diff_between_1and2.readlines())
-        assert format_stylish(generate_diff(  # test yaml-yaml comparison
-            'fixtures/tree_file1.yaml', 'fixtures/tree_file2.yaml')) == ''.join(correct_diff_between_1and2.readlines())
-    with open('fixtures/correct_diff_between_2and1.txt') as correct_diff_between_2and1:
-        assert format_stylish(generate_diff(  # test json-yaml comparison
-            'fixtures/tree_file2.json', 'fixtures/tree_file1.yaml')) == ''.join(correct_diff_between_2and1.readlines())
+@pytest.fixture(scope='module')
+def first_json():
+    return get_fixture('tree_file1.json')
 
 
-# test_generate_diff_stylish()
+@pytest.fixture(scope='module')
+def second_json():
+    return get_fixture('tree_file2.json')
 
-# with open('fixtures/correct_diff_between_1and2.txt') as correct_diff_between_1and2:
-#     print(correct_diff_between_1and2.readlines())
+
+@pytest.fixture(scope='module')
+def first_yaml():
+    return get_fixture('tree_file1.yaml')
+
+
+@pytest.fixture(scope='module')
+def second_yml():
+    return get_fixture('tree_file2.yml')
+
+
+@pytest.fixture(scope='module')
+def correct_stylish_data():
+    with open(get_fixture('correct_stylish_diff.txt')) as f:
+        return f.read()
+
+
+@pytest.fixture(scope='module')
+def correct_plain_data():
+    with open(get_fixture('correct_plain_diff.txt')) as f:
+        return f.read()
+
+
+@pytest.fixture(scope='module')
+def correct_jsonify_data():
+    with open(get_fixture('correct_jsonify_diff.json')) as f:
+        return f.read()
+
+
+def test_generate_diff_plain(first_json, second_json, first_yaml, second_yml, correct_plain_data):
+    expected = correct_plain_data
+    assert generate_diff(first_json, second_json, 'plain') == expected
+    assert generate_diff(first_yaml, second_yml, 'plain') == expected
+    assert generate_diff(first_json, second_yml, 'plain') == expected
+
+
+def test_generate_diff_jsonify(first_json, second_yml, correct_jsonify_data):
+    expected = correct_jsonify_data
+    assert generate_diff(first_json, second_yml, 'json') == expected

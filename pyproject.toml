@@ -14,11 +14,11 @@ pytest-cov = "^4.0.0"
 pyyaml = "^6.0"
 
 [tool.poetry.scripts]
-gendiff = 'gendiff.cli:parse'
+gendiff = 'gendiff.scripts.cli:parse'
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.0.0"
-pytest = "^7.2.2"
+pytest = "^7.4.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -37,13 +37,16 @@ def skip_unchanged_keys(diff_item):
 
 def format_plain(diff, cur_path=''):
     result = ''
-    presorted_diff = diff.sort()
-    sorted_diff = list(filter(skip_unchanged_keys, presorted_diff))
+    sorted_diff = list(filter(skip_unchanged_keys, diff))
     for item in sorted_diff:
         for key, val in item.items():
-            if str(type(val[1])) == "<class 'diff_tools.DiffObject'>":
-                new_path = str(key)if not cur_path else f'{cur_path}.{key}'
+            status = val[0]
+            if status == 'nested':
+                new_path = str(key) if not cur_path else f'{cur_path}.{key}'
                 result += format_plain(val[1], new_path)
             else:
                 result += get_plain_stdout(key, val, cur_path)
+    if not cur_path:
+        # Fork is aimed to remove last \n from result
+        return result[:-1]
     return result

@@ -1,4 +1,4 @@
-SYMBOL_STATUS = {'added': '+ ', 'removed': '- ', 'not changed': '  '}
+SYMBOL_STATUS = {'added': '+ ', 'removed': '- ', 'not changed': '  ', 'nested': '  '}
 
 
 def get_status_key(key, status):
@@ -6,25 +6,23 @@ def get_status_key(key, status):
 
 
 def build_stylish_tree(diff):
-    sorted_diff = diff.sort()
     tree = {}
-    for item in sorted_diff:
+    for item in diff:
         for key, val in item.items():
-            status = val[0]
-            value = val[1]
+            status, value = val[0], val[1]
             if isinstance(value, dict):
                 value = add_identities_for_dict(value)
+            if status == 'nested':
+                new_key = get_status_key(key, status)
+                new_val = build_stylish_tree(value)
+                tree[new_key] = new_val
             if status == 'updated':
-                if str(type(value)) == "<class 'diff_tools.DiffObject'>":
-                    new_key = get_status_key(key, 'not changed')
-                    tree[new_key] = build_stylish_tree(value)
-                else:
-                    first_key = get_status_key(key, 'removed')
-                    second_key = get_status_key(key, 'added')
-                    first_val = value[0] # noqa never could be called as key for dict
-                    second_val = value[1] # noqa
-                    tree[first_key] = first_val
-                    tree[second_key] = second_val
+                first_key = get_status_key(key, 'removed')
+                second_key = get_status_key(key, 'added')
+                first_val = value[0] # noqa never could be called as key for dict
+                second_val = value[1] # noqa
+                tree[first_key] = first_val
+                tree[second_key] = second_val
             else:
                 new_key = get_status_key(key, status)
                 tree[new_key] = value
