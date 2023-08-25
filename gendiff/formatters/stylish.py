@@ -45,7 +45,8 @@ def get_stylish_stdout(diff, tabs=1):
     elif isinstance(diff, dict):
         return "{\n" + '\n'.join([f'{tabs * "  "}{key}: '
                                   f'{get_stylish_stdout(value, tabs + 2)}'
-                                  for key, value in diff.items()]) + '\n' + (tabs - 1) * "  " + "}"
+                                  for key, value in diff.items()]) \
+            + '\n' + (tabs - 1) * "  " + "}"
     elif isinstance(diff, str):
         return f'{diff}'
     elif isinstance(diff, bool):

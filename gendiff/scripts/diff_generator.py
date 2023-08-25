@@ -16,5 +16,3 @@ def generate_diff(first_path, second_path, output_format):
     diff = build_diff(first_data, second_data)
     formatted_diff = OUTPUT_FORMATTER[output_format](diff)
     return formatted_diff
-
-# print((generate_diff('../../tests/fixtures/tree_file1.json', '../../tests/fixtures/tree_file2.json', 'json')))

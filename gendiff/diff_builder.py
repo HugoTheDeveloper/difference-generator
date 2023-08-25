@@ -38,8 +38,8 @@ def get_inner_diff(key, status, first_val, second_val):
         inner_diff[key] = (status, first_val)
     if status == 'updated':
         # Fork for case, when dict value was updated to non-dict value
-        if ((isinstance(first_val, dict) and not isinstance(second_val, dict))
-                or not isinstance(first_val, dict) and isinstance(second_val, dict)):
+        if (isinstance(first_val, dict) and not isinstance(second_val, dict)
+                or not isinstance(first_val, dict) and isinstance(second_val, dict)): # noqa there is no possibility to make a line transition without linter's remarks
             inner_diff[key] = (status, (first_val, second_val))
         else:
             inner_diff[key] = (status, (first_val, second_val))
