@@ -19,7 +19,7 @@ def get_plain_stdout(key, val, cur_path):
     if status == 'updated':
         first_val = prepare_value_to_json_style(value[0])
         second_val = prepare_value_to_json_style(value[1])
-        return f"{front_sample} updated: From {first_val} to {second_val}\n"
+        return f"{front_sample} updated. From {first_val} to {second_val}\n"
     if status == 'removed':
         return f'{front_sample} removed\n'
     if status == 'added':
