@@ -32,11 +32,11 @@ def build_stylish_tree(diff):
 def validate_val(value):
     if isinstance(value, dict):
         return add_identities_for_dict(value)
-    if isinstance(value, (list, tuple)):
+    elif isinstance(value, (list, tuple)):
         return "[" + ",".join(value) + "]"
-    if isinstance(value, bool):
+    elif isinstance(value, bool):
         return str(value).lower()
-    if value is None:
+    elif value is None:
         return "null"
     else:
         return str(value)

@@ -7,5 +7,6 @@ def parse():
     )
     comparator.add_argument('first_file')
     comparator.add_argument('second_file')
-    comparator.add_argument('-f', '--format', help='set format of output')
+    comparator.add_argument('-f', '--format', help='set format of output',
+                            default='stylish', )
     return comparator.parse_args()

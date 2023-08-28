@@ -1,11 +1,11 @@
 def prepare_value_to_json_style(value):
     if isinstance(value, dict):
         return '[complex value]'
-    if isinstance(value, str):
+    elif isinstance(value, str):
         return f"'{value}'"
-    if isinstance(value, bool):
+    elif isinstance(value, bool):
         return str(value).lower()
-    if value is None:
+    elif value is None:
         return "null"
     else:
         return str(value)

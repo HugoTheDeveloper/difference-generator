@@ -1,24 +1,20 @@
-# import json
-# from gendiff.formatters.stylish import format_stylish, build_stylish_tree
-# from gendiff.formatters.plain import format_plain
-
-
-def compare_vals(first_dic, second_dic, key):
-    first_val = first_dic.get(key, 'Not in dic')
-    second_val = second_dic.get(key, 'Not in dic')
+def compare_vals(first_val, second_val):
+    status = None
     if first_val != 'Not in dic' and second_val != 'Not in dic':
         if first_val == second_val:
-            return 'not changed'
+            status = 'not changed'
         else:
             if isinstance(first_val, dict) and isinstance(second_val, dict):
-                return 'nested'
-            return 'updated'
+                status = 'nested'
+            else:
+                status = 'updated'
 
     if first_val == 'Not in dic':
-        return 'added'
+        status = 'added'
 
     if second_val == 'Not in dic':
-        return 'removed'
+        status = 'removed'
+    return status
 
 
 def get_all_keys(first_dic, second_dic):
@@ -50,17 +46,9 @@ def build_diff(first_data, second_data):
     result = []
     all_keys = list(sorted(get_all_keys(first_data, second_data)))
     for key in all_keys:
-        changes_status = compare_vals(first_data, second_data, key)
         first_val = first_data.get(key, 'Not in dic')
         second_val = second_data.get(key, 'Not in dic')
+        changes_status = compare_vals(first_val, second_val)
         inner_diff = get_inner_diff(key, changes_status, first_val, second_val)
         result.append(inner_diff)
     return result
-
-# def get_file(path):
-#     with open(path) as f:
-#         return json.loads(f.read())
-
-# data1= get_file('../tests/fixtures/tree_file1.json')
-# data2 = get_file('../tests/fixtures/tree_file2.json')
-# print(format_stylish(build_diff(data1, data2)))
