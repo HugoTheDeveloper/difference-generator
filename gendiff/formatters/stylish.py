@@ -23,7 +23,8 @@ def build_stylish_tree(diff):
                 second_val = validate_val(value[1])  # noqa
                 tree[first_key] = first_val
                 tree[second_key] = second_val
-            if status == 'removed' or status == 'added' or status == 'not changed':
+            if status == 'removed' or status == 'added' or\
+                    status == 'not changed':
                 new_key = get_status_key(key, status)
                 tree[new_key] = validate_val(value)
     return tree
@@ -54,7 +55,7 @@ def add_identities_for_dict(dic):
 def get_stylish_stdout(diff, tabs_count=1):
     tab = '  '
     content = [f'{tabs_count * tab}{key}: '
-               f'{get_stylish_stdout(value, tabs_count + 2) if isinstance(value, dict) else value}'
+               f'{get_stylish_stdout(value, tabs_count + 2) if isinstance(value, dict) else value}' # noqa
                for key, value in diff.items()]
     return "{\n" + '\n'.join(content) + '\n' + (tabs_count - 1) * tab + "}"
 

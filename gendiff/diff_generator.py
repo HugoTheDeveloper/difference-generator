@@ -10,17 +10,10 @@ OUTPUT_FORMATTER = {'json': format_json,
 
 
 def generate_diff(first_path, second_path, output_format='stylish'):
+    if output_format is None:
+        output_format = 'stylish'
     first_data = read_file_(first_path)
     second_data = read_file_(second_path)
     diff = build_diff(first_data, second_data)
     formatted_diff = OUTPUT_FORMATTER[output_format](diff)
     return formatted_diff
-
-
-# path1 = '../../tests/fixtures/tree_file1.json'
-# path2 = '../../tests/fixtures/tree_file2.json'
-# data1 = read_file_(path1)
-# data2 = read_file_(path2)
-#
-#
-# print(generate_diff(path1, path2, 'json'))

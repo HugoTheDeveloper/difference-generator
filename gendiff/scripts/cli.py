@@ -1,4 +1,5 @@
 import argparse
+from gendiff.diff_generator import generate_diff
 
 
 def parse():
@@ -8,5 +9,10 @@ def parse():
     comparator.add_argument('first_file')
     comparator.add_argument('second_file')
     comparator.add_argument('-f', '--format', help='set format of output',
-                            default='stylish', )
-    return comparator.parse_args()
+                            default='stylish',
+                            choices=['stylish', 'plain', 'json'])
+    arguments = comparator.parse_args()
+    style = arguments.format
+    first_path = arguments.first_file
+    second_path = arguments.second_file
+    return generate_diff(first_path, second_path, style)
