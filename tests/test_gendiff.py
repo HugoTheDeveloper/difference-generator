@@ -30,8 +30,8 @@ def second_yml():
 
 @pytest.fixture(scope='module')
 def correct_stylish_data():
-    with open(get_fixture('correct_stylish_diff.txt')) as f:
-        return f.read()
+    with open(get_fixture('correct_stylish_diff.txt'), 'r') as f:
+        return f.read().strip()
 
 
 @pytest.fixture(scope='module')
