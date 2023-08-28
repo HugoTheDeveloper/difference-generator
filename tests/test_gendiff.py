@@ -56,3 +56,8 @@ def test_generate_diff_plain(first_json, second_json, first_yaml, second_yml, co
 def test_generate_diff_jsonify(first_json, second_yml, correct_jsonify_data):
     expected = correct_jsonify_data
     assert generate_diff(first_json, second_yml, 'json') == expected
+
+
+def test_generate_diff_stylish(first_json, second_yml, correct_stylish_data):
+    expected = correct_stylish_data
+    assert generate_diff(first_json, second_yml, 'stylish') == expected

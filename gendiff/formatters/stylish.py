@@ -11,23 +11,35 @@ def build_stylish_tree(diff):
     for item in diff:
         for key, val in item.items():
             status, value = val[0], val[1]
-            if isinstance(value, dict):
-                value = add_identities_for_dict(value)
             if status == 'nested':
                 new_key = get_status_key(key, status)
                 new_val = build_stylish_tree(value)
                 tree[new_key] = new_val
+                continue
             if status == 'updated':
                 first_key = get_status_key(key, 'removed')
                 second_key = get_status_key(key, 'added')
-                first_val = value[0] # noqa never could be called as key for dict
-                second_val = value[1] # noqa
+                first_val = validate_val(value[0])  # noqa never could be called as key for dict
+                second_val = validate_val(value[1])  # noqa
                 tree[first_key] = first_val
                 tree[second_key] = second_val
-            else:
+            if status == 'removed' or status == 'added' or status == 'not changed':
                 new_key = get_status_key(key, status)
-                tree[new_key] = value
+                tree[new_key] = validate_val(value)
     return tree
+
+
+def validate_val(value):
+    if isinstance(value, dict):
+        return add_identities_for_dict(value)
+    if isinstance(value, (list, tuple)):
+        return "[" + ",".join(value) + "]"
+    if isinstance(value, bool):
+        return str(value).lower()
+    if value is None:
+        return "null"
+    else:
+        return str(value)
 
 
 def add_identities_for_dict(dic):
@@ -39,22 +51,12 @@ def add_identities_for_dict(dic):
     return updated_dic
 
 
-def get_stylish_stdout(diff, tabs=1):
-    if isinstance(diff, (list, tuple)):
-        return "[" + ",".join([get_stylish_stdout(item) for item in diff]) + "]"
-    elif isinstance(diff, dict):
-        return "{\n" + '\n'.join([f'{tabs * "  "}{key}: '
-                                  f'{get_stylish_stdout(value, tabs + 2)}'
-                                  for key, value in diff.items()]) \
-            + '\n' + (tabs - 1) * "  " + "}"
-    elif isinstance(diff, str):
-        return f'{diff}'
-    elif isinstance(diff, bool):
-        return str(diff).lower()
-    elif diff is None:
-        return "null"
-    else:
-        return str(diff)
+def get_stylish_stdout(diff, tabs_count=1):
+    tab = '  '
+    content = [f'{tabs_count * tab}{key}: '
+               f'{get_stylish_stdout(value, tabs_count + 2) if isinstance(value, dict) else value}'
+               for key, value in diff.items()]
+    return "{\n" + '\n'.join(content) + '\n' + (tabs_count - 1) * tab + "}"
 
 
 def format_stylish(diff):

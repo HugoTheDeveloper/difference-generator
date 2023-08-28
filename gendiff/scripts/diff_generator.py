@@ -1,7 +1,7 @@
 #!usr/bin/env python3
 from gendiff.diff_builder import build_diff
 from gendiff.formatters.plain import format_plain
-from gendiff.formatters.stylish import format_stylish
+from gendiff.formatters.stylish import format_stylish, build_stylish_tree
 from gendiff.formatters.jsonify import format_json
 from gendiff.readers.reader import read_file_
 
@@ -16,3 +16,12 @@ def generate_diff(first_path, second_path, output_format):
     diff = build_diff(first_data, second_data)
     formatted_diff = OUTPUT_FORMATTER[output_format](diff)
     return formatted_diff
+
+
+# path1 = '../../tests/fixtures/tree_file1.json'
+# path2 = '../../tests/fixtures/tree_file2.json'
+# data1 = read_file_(path1)
+# data2 = read_file_(path2)
+#
+#
+# print(generate_diff(path1, path2, 'stylish'))
