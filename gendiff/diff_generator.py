@@ -17,3 +17,6 @@ def generate_diff(first_path, second_path, output_format='stylish'):
     diff = build_diff(first_data, second_data)
     formatted_diff = OUTPUT_FORMATTER[output_format](diff)
     return formatted_diff
+
+
+__all__ = ('generate_diff', )
