@@ -15,4 +15,4 @@ def parse():
     style = arguments.format
     first_path = arguments.first_file
     second_path = arguments.second_file
-    return generate_diff(first_path, second_path, style)
+    print(generate_diff(first_path, second_path, style))
