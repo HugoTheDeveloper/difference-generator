@@ -1,4 +1,4 @@
-from gendiff import *
+from gendiff import generate_diff
 import os
 import pytest
 
@@ -46,7 +46,7 @@ def correct_jsonify_data():
         return f.read()
 
 
-def test_generate_diff_plain(first_json, second_json, first_yaml, second_yml, correct_plain_data):
+def test_generate_diff_plain(first_json, second_json, first_yaml, second_yml, correct_plain_data): # noqa
     expected = correct_plain_data
     assert generate_diff(first_json, second_json, 'plain') == expected
     assert generate_diff(first_yaml, second_yml, 'plain') == expected
