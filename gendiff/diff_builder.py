@@ -3,17 +3,8 @@ def compare_vals(first_val, second_val):
         return 'not changed'
     elif isinstance(first_val, dict) and isinstance(second_val, dict):
         return 'nested'
-    elif first_val == 'Not in dic':
-        return 'added'
-    elif second_val == 'Not in dic':
-        return 'removed'
     else:
         return 'updated'
-
-
-def get_all_keys(first_dic, second_dic):
-    united_dic = {**first_dic, **second_dic}
-    return [key for key in united_dic.keys()]
 
 
 def get_inner_diff(key, status, first_val, second_val):
@@ -37,11 +28,23 @@ def get_inner_diff(key, status, first_val, second_val):
 
 def build_diff(first_data, second_data):
     result = []
-    all_keys = sorted(get_all_keys(first_data, second_data))
+    first_set = set(first_data.keys())
+    second_set = set(second_data.keys())
+    all_keys = sorted(list(first_set | second_set))
+    common_keys = first_set & second_set
+    first_exclusive_keys = first_set - second_set
+    second_exclusive_keys = second_set - first_set
     for key in all_keys:
-        first_val = first_data.get(key, 'Not in dic')
-        second_val = second_data.get(key, 'Not in dic')
-        changes_status = compare_vals(first_val, second_val)
+        first_val = first_data.get(key)
+        second_val = second_data.get(key)
+        changes_status = None
+        if key in common_keys:
+            changes_status = compare_vals(first_val, second_val)
+        if key in first_exclusive_keys:
+            changes_status = 'removed'
+        if key in second_exclusive_keys:
+            changes_status = 'added'
         inner_diff = get_inner_diff(key, changes_status, first_val, second_val)
         result.append(inner_diff)
+
     return result
