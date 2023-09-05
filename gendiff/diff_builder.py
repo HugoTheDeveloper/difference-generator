@@ -1,4 +1,4 @@
-def compare_vals(first_val, second_val):
+def get_node_type(first_val, second_val):
     if first_val == second_val:
         return 'not changed'
     elif isinstance(first_val, dict) and isinstance(second_val, dict):
@@ -17,12 +17,7 @@ def get_inner_diff(key, status, first_val, second_val):
     if status == 'removed':
         inner_diff[key] = (status, first_val)
     if status == 'updated':
-        # Fork for case, when dict value was updated to non-dict value
-        if (isinstance(first_val, dict) and not isinstance(second_val, dict)
-                or not isinstance(first_val, dict) and isinstance(second_val, dict)): # noqa there is no possibility to make a line transition without linter's remarks
-            inner_diff[key] = (status, (first_val, second_val))
-        else:
-            inner_diff[key] = (status, (first_val, second_val))
+        inner_diff[key] = (status, (first_val, second_val))
     return inner_diff
 
 
@@ -39,7 +34,7 @@ def build_diff(first_data, second_data):
         second_val = second_data.get(key)
         changes_status = None
         if key in common_keys:
-            changes_status = compare_vals(first_val, second_val)
+            changes_status = get_node_type(first_val, second_val)
         if key in first_exclusive_keys:
             changes_status = 'removed'
         if key in second_exclusive_keys:

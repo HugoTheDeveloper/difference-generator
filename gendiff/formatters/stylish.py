@@ -19,18 +19,18 @@ def build_stylish_tree(diff):
             if status == 'updated':
                 first_key = get_status_key(key, 'removed')
                 second_key = get_status_key(key, 'added')
-                first_val = validate_val(value[0])  # noqa never could be called as key for dict
-                second_val = validate_val(value[1])  # noqa
+                first_val = to_str(value[0])  # noqa never could be called as key for dict
+                second_val = to_str(value[1])  # noqa
                 tree[first_key] = first_val
                 tree[second_key] = second_val
             if status == 'removed' or status == 'added' or\
                     status == 'not changed':
                 new_key = get_status_key(key, status)
-                tree[new_key] = validate_val(value)
+                tree[new_key] = to_str(value)
     return tree
 
 
-def validate_val(value):
+def to_str(value):
     if isinstance(value, dict):
         return add_identities_for_dict(value)
     elif isinstance(value, (list, tuple)):
@@ -52,14 +52,14 @@ def add_identities_for_dict(dic):
     return updated_dic
 
 
-def get_stylish_stdout(diff, tabs_count=1):
+def get_stylish_output(diff, tabs_count=1):
     tab = '  '
     content = [f'{tabs_count * tab}{key}: '
-               f'{get_stylish_stdout(value, tabs_count + 2) if isinstance(value, dict) else value}' # noqa
+               f'{get_stylish_output(value, tabs_count + 2) if isinstance(value, dict) else value}'  # noqa
                for key, value in diff.items()]
     return "{\n" + '\n'.join(content) + '\n' + (tabs_count - 1) * tab + "}"
 
 
 def format_stylish(diff):
     stylish_tree = build_stylish_tree(diff)
-    return get_stylish_stdout(stylish_tree)
+    return get_stylish_output(stylish_tree)
