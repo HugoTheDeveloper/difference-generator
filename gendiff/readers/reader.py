@@ -11,12 +11,12 @@ def get_file_and_extension(path):
     if not FORMATTER.get(extension):
         raise ValueError("This file extension is not supported."
                          " Only 'json', 'yaml' and 'yml' files.")
-    file = open(path)
-    return file, extension
+    data = open(path).read()
+    return data, extension
 
 
-def parse_file(file, extension):
-    parsed_data = FORMATTER[extension](file.read())
+def parse_file(data, extension):
+    parsed_data = FORMATTER[extension](data)
     return parsed_data
 
 

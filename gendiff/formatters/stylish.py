@@ -19,8 +19,8 @@ def build_stylish_tree(diff):
             if status == 'updated':
                 first_key = get_status_key(key, 'removed')
                 second_key = get_status_key(key, 'added')
-                first_val = to_str(value[0])  # noqa never could be called as key for dict
-                second_val = to_str(value[1])  # noqa
+                first_val = to_str(value[0])
+                second_val = to_str(value[1])
                 tree[first_key] = first_val
                 tree[second_key] = second_val
             if status == 'removed' or status == 'added' or\
@@ -32,9 +32,9 @@ def build_stylish_tree(diff):
 
 def to_str(value):
     if isinstance(value, dict):
-        return add_identities_for_dict(value)
+        return add_identities(value)
     elif isinstance(value, (list, tuple)):
-        return "[" + ",".join(value) + "]"
+        return f"[{','.join(value)}]"
     elif isinstance(value, bool):
         return str(value).lower()
     elif value is None:
@@ -43,21 +43,22 @@ def to_str(value):
         return str(value)
 
 
-def add_identities_for_dict(dic):
+def add_identities(dic):
     updated_dic = {}
     for key, val in dic.items():
         if isinstance(val, dict):
-            val = add_identities_for_dict(val)
+            val = add_identities(val)
         updated_dic[f'  {key}'] = val
     return updated_dic
 
 
 def get_stylish_output(diff, tabs_count=1):
     tab = '  '
-    content = [f'{tabs_count * tab}{key}: '
-               f'{get_stylish_output(value, tabs_count + 2) if isinstance(value, dict) else value}'  # noqa
-               for key, value in diff.items()]
-    return "{\n" + '\n'.join(content) + '\n' + (tabs_count - 1) * tab + "}"
+    raw_content = [f'{tabs_count * tab}{key}: '
+                    f'{get_stylish_output(value, tabs_count + 2) if isinstance(value, dict) else value}'  # noqa
+                    for key, value in diff.items()]
+    content = '\n'.join(raw_content)
+    return f"{{\n{content}\n{(tabs_count - 1) * tab}}}"
 
 
 def format_stylish(diff):

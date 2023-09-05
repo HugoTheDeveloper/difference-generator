@@ -19,12 +19,12 @@ def get_plain_output(key, val, cur_path):
     if status == 'updated':
         first_val = to_str(value[0])
         second_val = to_str(value[1])
-        return f"{front_sample} updated. From {first_val} to {second_val}\n"
+        return f"{front_sample} updated. From {first_val} to {second_val}"
     if status == 'removed':
-        return f'{front_sample} removed\n'
+        return f'{front_sample} removed'
     if status == 'added':
         value = to_str(value)
-        return f"{front_sample} added with value: {value}\n"
+        return f"{front_sample} added with value: {value}"
 
 
 def skip_unchanged_keys(diff_item):
@@ -36,17 +36,14 @@ def skip_unchanged_keys(diff_item):
 
 
 def format_plain(diff, cur_path=''):
-    result = ''
+    result = []
     sorted_diff = list(filter(skip_unchanged_keys, diff))
     for item in sorted_diff:
         for key, val in item.items():
             status = val[0]
             if status == 'nested':
                 new_path = str(key) if not cur_path else f'{cur_path}.{key}'
-                result += format_plain(val[1], new_path)
+                result.append(format_plain(val[1], new_path))
             else:
-                result += get_plain_output(key, val, cur_path)
-    if not cur_path:
-        # Fork is aimed to remove last \n from result
-        return result[:-1]
-    return result
+                result.append(get_plain_output(key, val, cur_path))
+    return '\n'.join(result)
