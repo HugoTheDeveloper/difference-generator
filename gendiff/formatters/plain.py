@@ -27,20 +27,13 @@ def get_plain_output(key, val, cur_path):
         return f"{front_sample} added with value: {value}"
 
 
-def skip_unchanged_keys(diff_item):
-    for val in diff_item.values():
-        status = val[0]
-        if status == 'not changed':
-            return False
-        return True
-
-
 def format_plain(diff, cur_path=''):
     result = []
-    sorted_diff = list(filter(skip_unchanged_keys, diff))
-    for item in sorted_diff:
+    for item in diff:
         for key, val in item.items():
             status = val[0]
+            if status == 'not changed':
+                continue
             if status == 'nested':
                 new_path = str(key) if not cur_path else f'{cur_path}.{key}'
                 result.append(format_plain(val[1], new_path))
