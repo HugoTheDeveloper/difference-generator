@@ -11,7 +11,7 @@ def to_str(value):
         return str(value)
 
 
-def get_plain_output(key, val, cur_path):
+def get_plain_output(key, val, cur_path, acc):
     path = f'{cur_path}.{key}' if cur_path else key
     front_sample = f"Property '{path}' was"
     status = val[0]
@@ -19,24 +19,24 @@ def get_plain_output(key, val, cur_path):
     if status == 'updated':
         first_val = to_str(value[0])
         second_val = to_str(value[1])
-        return f"{front_sample} updated. From {first_val} to {second_val}"
-    if status == 'removed':
-        return f'{front_sample} removed'
-    if status == 'added':
+        acc.append(f"{front_sample} updated. From {first_val} to {second_val}")
+    elif status == 'removed':
+        acc.append(f'{front_sample} removed')
+    elif status == 'added':
         value = to_str(value)
-        return f"{front_sample} added with value: {value}"
+        acc.append(f"{front_sample} added with value: {value}")
+    elif status == 'not changed':
+        pass
+    elif status == 'nested':
+        new_path = str(key) if not cur_path else f'{cur_path}.{key}'
+        acc.append(format_plain(val[1], new_path))
+    else:
+        raise ValueError('Incorrect status!')
 
 
 def format_plain(diff, cur_path=''):
     result = []
     for item in diff:
         for key, val in item.items():
-            status = val[0]
-            if status == 'not changed':
-                continue
-            if status == 'nested':
-                new_path = str(key) if not cur_path else f'{cur_path}.{key}'
-                result.append(format_plain(val[1], new_path))
-            else:
-                result.append(get_plain_output(key, val, cur_path))
+            get_plain_output(key, val, cur_path, result)
     return '\n'.join(result)

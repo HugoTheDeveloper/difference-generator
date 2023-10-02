@@ -15,26 +15,27 @@ def build_stylish_tree(diff, depth=1):
                 new_key = get_status_key(key, status)
                 new_val = build_stylish_tree(value, depth + 1)
                 tree[new_key] = new_val
-                continue
-            if status == 'updated':
+            elif status == 'updated':
                 first_key = get_status_key(key, 'removed')
                 second_key = get_status_key(key, 'added')
                 first_val = to_str(value[0], depth)
                 second_val = to_str(value[1], depth)
                 tree[first_key] = first_val
                 tree[second_key] = second_val
-            if status == 'removed' or status == 'added' or\
+            elif status == 'removed' or status == 'added' or\
                     status == 'not changed':
                 new_key = get_status_key(key, status)
                 tree[new_key] = to_str(value, depth)
+            else:
+                raise ValueError('Incorrect status!')
     return tree
 
 
 def to_str(value, depth=0):
     if isinstance(value, dict):
         prepared_dict = add_identities(value)
-        tab = depth * 2 + 1
-        return get_stylish_output(prepared_dict, tab)
+        indent = depth * 2 + 1
+        return stylish_dict_to_str(prepared_dict, indent)
     elif isinstance(value, (list, tuple)):
         return f"[{','.join(value)}]"
     elif isinstance(value, bool):
@@ -54,15 +55,15 @@ def add_identities(dic):
     return updated_dic
 
 
-def get_stylish_output(diff, tabs_count=1):
-    tab = '  '
-    raw_content = [f'{tabs_count * tab}{key}: '
-                    f'{get_stylish_output(value, tabs_count + 2) if isinstance(value, dict) else value}'  # noqa
-                    for key, value in diff.items()]
+def stylish_dict_to_str(dic, indents_count=1):
+    indent = '  '
+    raw_content = [f'{indents_count * indent}{key}: '
+                    f'{stylish_dict_to_str(value, indents_count + 2) if isinstance(value, dict) else value}'  # noqa
+                    for key, value in dic.items()]
     content = '\n'.join(raw_content)
-    return f"{{\n{content}\n{(tabs_count - 1) * tab}}}"
+    return f"{{\n{content}\n{(indents_count - 1) * indent}}}"
 
 
 def format_stylish(diff):
     stylish_tree = build_stylish_tree(diff)
-    return get_stylish_output(stylish_tree)
+    return stylish_dict_to_str(stylish_tree)

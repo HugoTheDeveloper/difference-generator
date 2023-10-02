@@ -21,8 +21,5 @@ def get_expected_value(filename):
 def test_generate_diff(first_path, second_path, correct, output_format):
     first_file = get_fixture(first_path)
     second_file = get_fixture(second_path)
-    if output_format == 'stylish':
-        expected = get_expected_value(correct).strip()
-    else:
-        expected = get_expected_value(correct)
+    expected = get_expected_value(correct).strip()
     assert generate_diff(first_file, second_file, output_format) == expected
